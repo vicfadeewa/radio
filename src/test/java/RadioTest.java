@@ -2,58 +2,60 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RadioTest {
+    @Test
+    void shouldCreateDefaultRadio() {
+        Radio radio = new Radio();
+        assertEquals(10, radio.getStationCount());
+        assertEquals(9, radio.getMaxStation());
+    }
 
     @Test
-    void shouldSwitchToNextStation() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(8);
+    void shouldCreateCustomRadio() {
+        Radio radio = new Radio(15);
+        assertEquals(15, radio.getStationCount());
+        assertEquals(14, radio.getMaxStation());
+    }
+
+    @Test
+    void shouldHandleInvalidStationCount() {
+        Radio radio = new Radio(-5);
+        assertEquals(10, radio.getStationCount()); // Проверка fallback
+    }
+
+    @Test
+    void shouldSwitchStations() {
+        Radio radio = new Radio(5);
+        radio.setCurrentStation(3);
+
         radio.next();
-        assertEquals(9, radio.getCurrentStation());
+        assertEquals(4, radio.getCurrentStation());
 
         radio.next();
-        assertEquals(0, radio.getCurrentStation());
-    }
-
-    @Test
-    void shouldSwitchToPrevStation() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(1);
-        radio.prev();
-        assertEquals(0, radio.getCurrentStation());
+        assertEquals(0, radio.getCurrentStation()); // Переход через максимум
 
         radio.prev();
-        assertEquals(9, radio.getCurrentStation());
+        assertEquals(4, radio.getCurrentStation()); // Переход через минимум
     }
 
     @Test
-    void shouldNotSetInvalidStation() {
+    void shouldControlVolume() {
         Radio radio = new Radio();
-        radio.setCurrentStation(5);
-        radio.setCurrentStation(-1);
-        assertEquals(5, radio.getCurrentStation());
 
-        radio.setCurrentStation(10);
-        assertEquals(5, radio.getCurrentStation());
-    }
-
-    @Test
-    void shouldIncreaseVolume() {
-        Radio radio = new Radio();
-        radio.increaseVolume();
-        assertEquals(1, radio.getCurrentVolume());
-
-        for(int i = 0; i < 100; i++) radio.increaseVolume();
+        for (int i = 0; i < 150; i++) {
+            radio.increaseVolume();
+        }
         assertEquals(100, radio.getCurrentVolume());
+
+        for (int i = 0; i < 150; i++) {
+            radio.decreaseVolume();
+        }
+        assertEquals(0, radio.getCurrentVolume());
     }
 
     @Test
-    void shouldDecreaseVolume() {
+    void shouldIgnoreInvalidStation() {
         Radio radio = new Radio();
-        radio.increaseVolume();
-        radio.decreaseVolume();
-        assertEquals(0, radio.getCurrentVolume());
-
-        radio.decreaseVolume();
-        assertEquals(0, radio.getCurrentVolume());
+        radio.setCurrentStation(15);
+        assertEquals(0, radio.getCurrentStation());
     }
 }

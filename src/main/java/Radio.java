@@ -1,40 +1,74 @@
 public class Radio {
     private int currentStation;
     private int currentVolume;
+    private final int stationCount;
+    private final int maxStation;
 
+    public Radio() {
+        this.stationCount = 10;
+        this.maxStation = 9;
+    }
+
+    public Radio(int stationCount) {
+        if (stationCount <= 0) {
+            stationCount = 10; // Значение по умолчанию при невалидном вводе
+        }
+        this.stationCount = stationCount;
+        this.maxStation = stationCount - 1;
+    }
+
+    // переключение на следующую станцию
     public void next() {
-        this.currentStation = (this.currentStation == 9) ? 0 : this.currentStation + 1;
+        if (currentStation == maxStation) {
+            currentStation = 0;
+        } else {
+            currentStation++;
+        }
     }
 
+    // переключение на предыдущую станцию
     public void prev() {
-        this.currentStation = (this.currentStation == 0) ? 9 : this.currentStation - 1;
+        if (currentStation == 0) {
+            currentStation = maxStation;
+        } else {
+            currentStation--;
+        }
     }
 
+    // установка станции
     public void setCurrentStation(int newStation) {
-        if (newStation >= 0) {
-            if (newStation <= 9) {
-                this.currentStation = newStation;
-            }
+        if (newStation >= 0 && newStation <= maxStation) {
+            currentStation = newStation;
         }
     }
 
+    // увеличение громкости
     public void increaseVolume() {
-        if (this.currentVolume < 100) {
-            this.currentVolume++;
+        if (currentVolume < 100) {
+            currentVolume++;
         }
     }
 
+    // уменьшение громкости
     public void decreaseVolume() {
-        if (this.currentVolume > 0) {
-            this.currentVolume--;
+        if (currentVolume > 0) {
+            currentVolume--;
         }
     }
 
     public int getCurrentStation() {
-        return this.currentStation;
+        return currentStation;
     }
 
     public int getCurrentVolume() {
-        return this.currentVolume;
+        return currentVolume;
+    }
+
+    public int getStationCount() {
+        return stationCount;
+    }
+
+    public int getMaxStation() {
+        return maxStation;
     }
 }
