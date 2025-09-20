@@ -56,4 +56,44 @@ class RadioTest {
         radio.decreaseVolume();
         assertEquals(0, radio.getCurrentVolume());
     }
+
+    // Новый тест для проверки работы с нестандартным количеством станций
+    @Test
+    void shouldHandleCustomStationCount() {
+        Radio radio = new Radio(15);
+
+        radio.setCurrentStation(14);
+        radio.next();
+        assertEquals(0, radio.getCurrentStation());
+
+        radio.prev();
+        assertEquals(14, radio.getCurrentStation());
+    }
+
+    // Тест для проверки граничных случаев при нестандартном количестве станций
+    @Test
+    void shouldHandleBoundaryCases() {
+        Radio radio = new Radio(5); // 5 станций: 0-4
+
+        // Переключение с последней станции на первую
+        radio.setCurrentStation(4);
+        radio.next();
+        assertEquals(0, radio.getCurrentStation());
+
+        // Переключение с первой станции на последнюю
+        radio.prev();
+        assertEquals(4, radio.getCurrentStation());
+    }
+
+    // Тест для проверки некорректных значений в конструкторе
+    @Test
+    void shouldThrowExceptionForInvalidStationCount() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Radio(0);
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Radio(-5);
+        });
+    }
 }

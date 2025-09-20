@@ -1,40 +1,49 @@
 public class Radio {
     private int currentStation;
+    private final int maxStation;
     private int currentVolume;
 
+    // Конструктор по умолчанию (10 станций)
+    public Radio() {
+        this.maxStation = 9; // 10 станций: 0-9
+    }
+
+    // Конструктор с настройкой количества станций
+    public Radio(int stationCount) {
+        if (stationCount < 1) {
+            throw new IllegalArgumentException("Количество станций должно быть положительным");
+        }
+        this.maxStation = stationCount - 1;
+    }
+
     public void next() {
-        this.currentStation = (this.currentStation == 9) ? 0 : this.currentStation + 1;
+        currentStation = (currentStation == maxStation) ? 0 : currentStation + 1;
     }
 
     public void prev() {
-        this.currentStation = (this.currentStation == 0) ? 9 : this.currentStation - 1;
+        currentStation = (currentStation == 0) ? maxStation : currentStation - 1;
     }
 
     public void setCurrentStation(int newStation) {
-        if (newStation >= 0) {
-            if (newStation <= 9) {
-                this.currentStation = newStation;
-            }
+        if (newStation >= 0 && newStation <= maxStation) {
+            currentStation = newStation;
         }
     }
 
+    // Методы для громкости остаются без изменений
     public void increaseVolume() {
-        if (this.currentVolume < 100) {
-            this.currentVolume++;
-        }
+        if (currentVolume < 100) currentVolume++;
     }
 
     public void decreaseVolume() {
-        if (this.currentVolume > 0) {
-            this.currentVolume--;
-        }
+        if (currentVolume > 0) currentVolume--;
     }
 
     public int getCurrentStation() {
-        return this.currentStation;
+        return currentStation;
     }
 
     public int getCurrentVolume() {
-        return this.currentVolume;
+        return currentVolume;
     }
 }
