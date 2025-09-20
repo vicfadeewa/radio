@@ -1,59 +1,42 @@
 public class Radio {
     private int currentStation;
-    private int currentVolume;
-    private final int stationCount;
     private final int maxStation;
+    private int currentVolume;
 
+    // Конструктор по умолчанию (10 станций)
     public Radio() {
-        this.stationCount = 10;
-        this.maxStation = 9;
+        this.maxStation = 9; // 10 станций: 0-9
     }
 
+    // Конструктор с настройкой количества станций
     public Radio(int stationCount) {
-        if (stationCount <= 0) {
-            stationCount = 10; // Значение по умолчанию при невалидном вводе
+        if (stationCount < 1) {
+            throw new IllegalArgumentException("Количество станций должно быть положительным");
         }
-        this.stationCount = stationCount;
         this.maxStation = stationCount - 1;
     }
 
-    // переключение на следующую станцию
     public void next() {
-        if (currentStation == maxStation) {
-            currentStation = 0;
-        } else {
-            currentStation++;
-        }
+        currentStation = (currentStation == maxStation) ? 0 : currentStation + 1;
     }
 
-    // переключение на предыдущую станцию
     public void prev() {
-        if (currentStation == 0) {
-            currentStation = maxStation;
-        } else {
-            currentStation--;
-        }
+        currentStation = (currentStation == 0) ? maxStation : currentStation - 1;
     }
 
-    // установка станции
     public void setCurrentStation(int newStation) {
         if (newStation >= 0 && newStation <= maxStation) {
             currentStation = newStation;
         }
     }
 
-    // увеличение громкости
+    // Методы для громкости остаются без изменений
     public void increaseVolume() {
-        if (currentVolume < 100) {
-            currentVolume++;
-        }
+        if (currentVolume < 100) currentVolume++;
     }
 
-    // уменьшение громкости
     public void decreaseVolume() {
-        if (currentVolume > 0) {
-            currentVolume--;
-        }
+        if (currentVolume > 0) currentVolume--;
     }
 
     public int getCurrentStation() {
@@ -62,13 +45,5 @@ public class Radio {
 
     public int getCurrentVolume() {
         return currentVolume;
-    }
-
-    public int getStationCount() {
-        return stationCount;
-    }
-
-    public int getMaxStation() {
-        return maxStation;
     }
 }
